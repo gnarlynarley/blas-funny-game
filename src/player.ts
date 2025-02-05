@@ -109,7 +109,7 @@ export async function createPlayer({
           directionForwards = false;
         }
 
-        if (keyboard.isPressed('f')) {
+        if (keyboard.isPressed('l')) {
           action = {
             type: 'dash',
             direction: directionForwards ? 'right' : 'left',
