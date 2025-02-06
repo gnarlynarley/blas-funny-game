@@ -5,7 +5,7 @@ import { createPlayer } from './player';
 import './style.css';
 
 async function bootstrap() {
-  const WIDTH = 400;
+  const WIDTH = 600;
   const HEIGHT = WIDTH * 0.5;
   const FLOOR = HEIGHT * 0.9;
 

@@ -8,6 +8,12 @@ import dashSpriteSrc from './sprites/meteorstrikefinal.png';
 import Renderer from './lib/Renderer';
 import Keyboard from './lib/Keyboard';
 
+const KEYBOARD_CONTROLS = {
+  moveLeft: 'a',
+  moveRight: 'd',
+  jump: 'space',
+  dash: 'l',
+};
 type PlayerAction =
   | {
       type: 'controlled';
@@ -87,19 +93,20 @@ export async function createPlayer({
       const airSpeed = 1;
       const jumpSpeed = 5;
       const gravity = jumpSpeed * 0.15;
-      const dashDuration = 200;
+      const dashDuration = 100;
+      const dashSpeed = 14;
 
       const speed = onFloor ? floorSpeed : airSpeed;
 
       const acceleration = new Vector();
       if (action.type === 'controlled') {
-        if (keyboard.isPressed('a')) {
+        if (keyboard.isPressed(KEYBOARD_CONTROLS.moveLeft)) {
           acceleration.x = -speed;
         }
-        if (keyboard.isPressed('d')) {
+        if (keyboard.isPressed(KEYBOARD_CONTROLS.moveRight)) {
           acceleration.x = speed;
         }
-        if (keyboard.isPressed('space') && onFloor) {
+        if (keyboard.isPressed(KEYBOARD_CONTROLS.jump) && onFloor) {
           acceleration.y = -jumpSpeed;
         }
         // set the direction after the player input is done.
@@ -109,7 +116,7 @@ export async function createPlayer({
           directionForwards = false;
         }
 
-        if (keyboard.isPressed('l')) {
+        if (keyboard.isPressed(KEYBOARD_CONTROLS.dash)) {
           action = {
             type: 'dash',
             direction: directionForwards ? 'right' : 'left',
@@ -120,15 +127,18 @@ export async function createPlayer({
 
       if (action.type === 'dash') {
         action.elapsed -= dt;
-        if (action.elapsed <= 0) {
+        if (
+          action.elapsed <= 0 &&
+          !keyboard.isPressed(KEYBOARD_CONTROLS.dash)
+        ) {
           action = { type: 'controlled' };
         } else {
           // reset velocity.
           player.velocity.x = 0;
           player.velocity.y = 0;
 
-          const speed = 14;
-          acceleration.x = action.direction === 'right' ? speed : -speed;
+          acceleration.x =
+            action.direction === 'right' ? dashSpeed : -dashSpeed;
         }
       } else {
         // add drag
