@@ -14,8 +14,8 @@ export default class Renderer {
     this.canvas = canvas;
     this.width = width;
     this.height = height;
-    this.context = canvas.getContext('2d')!;
-    if (this.context === null) throw new Error('Unable to get Canvas Context.');
+    this.context = canvas.getContext("2d")!;
+    if (this.context === null) throw new Error("Unable to get Canvas Context.");
     this.canvas.width = width;
     this.canvas.height = height;
   }

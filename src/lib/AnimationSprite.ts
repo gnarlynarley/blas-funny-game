@@ -1,5 +1,5 @@
-import createImage from './createImage';
-import type Renderer from './Renderer';
+import createImage from "./createImage";
+import type Renderer from "./Renderer";
 
 export type AnimationSpriteOptions = {
   image: HTMLImageElement;
@@ -13,7 +13,7 @@ export type AnimationSpriteOptions = {
 };
 export type AnimationSpriteFromSrcOptions = { src: string } & Omit<
   AnimationSpriteOptions,
-  'image'
+  "image"
 >;
 
 export default class AnimationSprite {
@@ -48,7 +48,7 @@ export default class AnimationSprite {
     offsetY,
     once,
   }: AnimationSpriteOptions) {
-    if (frames < 1) throw new Error('Frames cannot be lower than 1.');
+    if (frames < 1) throw new Error("Frames cannot be lower than 1.");
     this.image = image;
     this.frames = frames;
     this.gap = gap;
@@ -71,7 +71,7 @@ export default class AnimationSprite {
     if (this.once) {
       this.currentTime = Math.min(
         fullDuration - 0.00001,
-        this.currentTime + dt
+        this.currentTime + dt,
       );
     } else {
       this.currentTime = (this.currentTime + dt) % fullDuration;
@@ -89,7 +89,7 @@ export default class AnimationSprite {
     }
 
     const frameIndex = Math.floor(
-      (this.currentTime / (1000 / this.fps)) % this.frames
+      (this.currentTime / (1000 / this.fps)) % this.frames,
     );
     context.drawImage(
       this.image,
@@ -100,7 +100,7 @@ export default class AnimationSprite {
       0,
       0,
       this.width,
-      this.height
+      this.height,
     );
 
     context.restore();

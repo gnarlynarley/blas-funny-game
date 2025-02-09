@@ -1,26 +1,30 @@
-import AnimationSprite from './lib/AnimationSprite';
-import GameObject from './lib/GameObject';
-import Vector from './lib/Vector';
-import walkingSpriteSrc from './sprites/ristarwalkingfinal.png';
-import idleSpriteSrc from './sprites/ristaridle.png';
-import jumpSpriteSrc from './sprites/ristarjumpingsprite.png';
-import dashSpriteSrc from './sprites/meteorstrikefinal.png';
-import Renderer from './lib/Renderer';
-import Keyboard from './lib/Keyboard';
+import AnimationSprite from "./lib/AnimationSprite";
+import GameObject from "./lib/GameObject";
+import Vector from "./lib/Vector";
+import walkingSpriteSrc from "./sprites/ristarwalkingfinal.png";
+import idleSpriteSrc from "./sprites/ristaridle.png";
+import jumpSpriteSrc from "./sprites/ristarjumpingsprite.png";
+import dashSpriteSrc from "./sprites/meteorstrikefinal.png";
+import Renderer from "./lib/Renderer";
+import Keyboard from "./lib/Keyboard";
 
 const KEYBOARD_CONTROLS = {
-  moveLeft: 'a',
-  moveRight: 'd',
-  jump: 'space',
-  dash: 'l',
+  moveLeft: "a",
+  moveRight: "d",
+  jump: "space",
+  dash: "l",
 };
 type PlayerAction =
   | {
-      type: 'controlled';
+      type: "controlled";
     }
   | {
-      type: 'dash';
-      direction: 'left' | 'right';
+      type: "automated";
+      duration: number;
+    }
+  | {
+      type: "dash";
+      direction: "left" | "right";
       elapsed: number;
     };
 
@@ -37,7 +41,8 @@ export async function createPlayer({
 }) {
   let directionForwards = true;
   let action: PlayerAction = {
-    type: 'controlled',
+    type: "automated",
+    duration: 1000,
   };
 
   const walkingSprite = await AnimationSprite.fromSrc({
@@ -99,7 +104,18 @@ export async function createPlayer({
       const speed = onFloor ? floorSpeed : airSpeed;
 
       const acceleration = new Vector();
-      if (action.type === 'controlled') {
+
+      if (action.type === "automated") {
+        acceleration.x = 0.4;
+        action.duration -= dt;
+        if (action.duration <= 0) {
+          action = {
+            type: "controlled",
+          };
+        }
+      }
+
+      if (action.type === "controlled") {
         if (keyboard.isPressed(KEYBOARD_CONTROLS.moveLeft)) {
           acceleration.x = -speed;
         }
@@ -118,27 +134,27 @@ export async function createPlayer({
 
         if (keyboard.isPressed(KEYBOARD_CONTROLS.dash)) {
           action = {
-            type: 'dash',
-            direction: directionForwards ? 'right' : 'left',
+            type: "dash",
+            direction: directionForwards ? "right" : "left",
             elapsed: dashDuration,
           };
         }
       }
 
-      if (action.type === 'dash') {
+      if (action.type === "dash") {
         action.elapsed -= dt;
         if (
           action.elapsed <= 0 &&
           !keyboard.isPressed(KEYBOARD_CONTROLS.dash)
         ) {
-          action = { type: 'controlled' };
+          action = { type: "controlled" };
         } else {
           // reset velocity.
           player.velocity.x = 0;
           player.velocity.y = 0;
 
           acceleration.x =
-            action.direction === 'right' ? dashSpeed : -dashSpeed;
+            action.direction === "right" ? dashSpeed : -dashSpeed;
         }
       } else {
         // add drag
@@ -170,7 +186,7 @@ export async function createPlayer({
 
       const currentSpeed = Math.min(2, Math.abs(player.vx) * 0.3);
 
-      if (action.type === 'dash') {
+      if (action.type === "dash") {
         currentSprite = dashSprite;
       } else {
         if (player.y < initialY) {

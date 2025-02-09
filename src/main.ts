@@ -1,8 +1,8 @@
-import GameLoop from './lib/GameLoop';
-import Keyboard from './lib/Keyboard';
-import Renderer from './lib/Renderer';
-import { createPlayer } from './player';
-import './style.css';
+import GameLoop from "./lib/GameLoop";
+import Keyboard from "./lib/Keyboard";
+import Renderer from "./lib/Renderer";
+import { createPlayer } from "./player";
+import "./style.css";
 
 async function bootstrap() {
   const WIDTH = 600;
@@ -11,7 +11,7 @@ async function bootstrap() {
 
   const keyboard = new Keyboard();
   const renderer = new Renderer({
-    canvas: document.querySelector('canvas')!,
+    canvas: document.querySelector("canvas")!,
     width: WIDTH,
     height: HEIGHT,
   });
@@ -19,7 +19,7 @@ async function bootstrap() {
   const player = await createPlayer({
     renderer,
     keyboard,
-    initialX: renderer.width * 0.2,
+    initialX: 0,
     initialY: FLOOR,
   });
 
@@ -31,14 +31,14 @@ async function bootstrap() {
       const floorOffset = 8;
       renderer.clear();
       // render a floor.
-      renderer.context.fillStyle = '#e7dcc7';
+      renderer.context.fillStyle = "#e7dcc7";
       renderer.context.fillRect(
         0,
         FLOOR - floorOffset,
         renderer.width,
-        renderer.height - FLOOR + floorOffset
+        renderer.height - FLOOR + floorOffset,
       );
-      renderer.context.fillStyle = '#ae986e';
+      renderer.context.fillStyle = "#ae986e";
       renderer.context.fillRect(0, FLOOR - floorOffset, renderer.width, 1);
       // player render.
       player.render(renderer);

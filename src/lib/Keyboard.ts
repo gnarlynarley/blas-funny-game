@@ -1,15 +1,15 @@
 const KEY_MAP: Record<string, string> = {
-  ' ': 'space',
+  " ": "space",
 };
 
 export default class Keyboard {
   #keysPressed = new Set<string>();
 
   constructor() {
-    window.addEventListener('keydown', ({ key }) => {
+    window.addEventListener("keydown", ({ key }) => {
       this.#keysPressed.add(this.#normalizeKey(key));
     });
-    window.addEventListener('keyup', ({ key }) => {
+    window.addEventListener("keyup", ({ key }) => {
       this.#keysPressed.delete(this.#normalizeKey(key));
     });
   }

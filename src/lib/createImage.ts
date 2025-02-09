@@ -1,5 +1,5 @@
 export default async function createImage(
-  src: string
+  src: string,
 ): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const image = new Image();
@@ -7,7 +7,7 @@ export default async function createImage(
       resolve(image);
     };
     image.onerror = () => {
-      reject(new Error('Image could not be loaded.'));
+      reject(new Error("Image could not be loaded."));
     };
     image.src = src;
   });

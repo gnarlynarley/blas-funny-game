@@ -1,6 +1,6 @@
-import noop from './noop';
-import Renderer from './Renderer';
-import Vector from './Vector';
+import noop from "./noop";
+import Renderer from "./Renderer";
+import Vector from "./Vector";
 
 type Anchor = { x: number; y: number };
 type GameObjectOptions = {
@@ -68,7 +68,7 @@ export default class GameObject {
     }
     context.translate(
       Math.round(x - anchor.x * width),
-      Math.round(y - anchor.y * height)
+      Math.round(y - anchor.y * height),
     );
     this.#render(renderer);
     context.restore();
